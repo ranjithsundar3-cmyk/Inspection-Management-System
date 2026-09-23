@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import { AuthService } from '../services/AuthService';
 
 export class AuthController {
-  private authService = new AuthService();
+  private svc = new AuthService();
 
   async register(req: Request, res: Response) {
     try {
-      const result = await this.authService.register(req.body);
+      const result = await this.svc.register(req.body);
       res.status(201).json(result);
     } catch (error: any) {
       res.status(400).json({ error: error.message });
@@ -15,7 +15,7 @@ export class AuthController {
 
   async login(req: Request, res: Response) {
     try {
-      const result = await this authService.login(req.body);
+      const result = await this.svc.login(req.body);
       res.json(result);
     } catch (error: any) {
       res.status(401).json({ error: error.message });
@@ -25,7 +25,7 @@ export class AuthController {
   async me(req: Request, res: Response) {
     try {
       const authReq = req as any;
-      const user = await this authService.getCurrentUser(authReq.user.userId);
+      const user = await this.svc.getCurrentUser(authReq.user.userId);
       res.json(user);
     } catch (error: any) {
       res.status(404).json({ error: error.message });
@@ -35,7 +35,7 @@ export class AuthController {
   async updateProfile(req: Request, res: Response) {
     try {
       const authReq = req as any;
-      const user = await this authService.updateUser(authReq.user.userId, req.body);
+      const user = await this.svc.updateUser(authReq.user.userId, req.body);
       res.json(user);
     } catch (error: any) {
       res.status(400).json({ error: error.message });

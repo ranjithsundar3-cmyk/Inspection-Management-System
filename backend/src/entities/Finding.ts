@@ -6,7 +6,6 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
-  OneToMany,
 } from 'typeorm';
 import { Inspection } from './Inspection';
 import { User } from './User';
@@ -53,14 +52,14 @@ export class Finding {
   @Column({ type: 'text', nullable: true })
   evidence: string;
 
-  @Column({ type: 'enum', enum: FindingSeverity })
-  severity: FindingSeverity;
+  @Column()
+  severity: string;
 
-  @Column({ type: 'enum', enum: FindingStatus, default: FindingStatus.OPEN })
-  status: FindingStatus;
+  @Column({ default: 'open' })
+  status: string;
 
-  @Column({ type: 'enum', enum: FindingCategory })
-  category: FindingCategory;
+  @Column()
+  category: string;
 
   @Column({ nullable: true })
   location: string;

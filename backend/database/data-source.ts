@@ -1,11 +1,11 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { User } from '../entities/User';
-import { Inspection } from '../entities/Inspection';
-import { Finding } from '../entities/Finding';
-import { Report } from '../entities/Report';
-import { Audit } from '../entities/Audit';
-import { AuditFinding } from '../entities/AuditFinding';
+import { User } from '../src/entities/User';
+import { Inspection } from '../src/entities/Inspection';
+import { Finding } from '../src/entities/Finding';
+import { Report } from '../src/entities/Report';
+import { Audit } from '../src/entities/Audit';
+import { AuditFinding } from '../src/entities/AuditFinding';
 
 export const AppDataSource = new DataSource({
   type: 'sqlite',

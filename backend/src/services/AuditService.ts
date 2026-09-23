@@ -37,9 +37,15 @@ export interface UpdateAuditData {
 }
 
 export class AuditService {
-  private audits = getRepository(Audit);
-  private auditFindings = getRepository(AuditFinding);
-  private users = getRepository(User);
+  private get audits(): Repository<Audit> {
+    return getRepository(Audit);
+  }
+  private get auditFindings(): Repository<AuditFinding> {
+    return getRepository(AuditFinding);
+  }
+  private get users(): Repository<User> {
+    return getRepository(User);
+  }
 
   async getAll(filters: {
     status?: AuditStatus;

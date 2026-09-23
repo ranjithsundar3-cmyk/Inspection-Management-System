@@ -1,21 +1,23 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { getRepository } from 'typeorm';
-import { User, UserRole, UserStatus } from '../entities/User';
+import { getRepository, Repository } from 'typeorm';
+import { User } from '../entities/User';
 
 export interface JWTPayload {
   userId: number;
   email: string;
-  role: UserRole;
+  role: string;
 }
 
 export interface AuthResponse {
   token: string;
-  user: Omit<User, 'password'>;
+  user: any;
 }
 
 export class AuthService {
-  private users = getRepository(User);
+  private get users(): Repository<User> {
+    return getRepository(User);
+  }
 
   async register(data: {
     email: string;
@@ -25,7 +27,7 @@ export class AuthService {
     phone?: string;
     organization?: string;
     position?: string;
-    role?: UserRole;
+    role?: string;
   }): Promise<AuthResponse> {
     const existingUser = await this.users.findOne({ where: { email: data.email } });
     if (existingUser) {
@@ -34,8 +36,8 @@ export class AuthService {
 
     const user = this.users.create({
       ...data,
-      role: data.role || UserRole.INSPECTOR,
-      status: UserStatus.ACTIVE,
+      role: data.role || 'inspector',
+      status: 'active',
     });
 
     await this.users.save(user);
@@ -50,7 +52,7 @@ export class AuthService {
       throw new Error('Invalid email or password');
     }
 
-    if (user.status === UserStatus.SUSPENDED) {
+    if (user.status === 'suspended') {
       throw new Error('Account is suspended');
     }
 
@@ -78,7 +80,7 @@ export class AuthService {
     return jwt.verify(token, process.env.JWT_SECRET || 'default_secret') as JWTPayload;
   }
 
-  async getCurrentUser(userId: number): Promise<Omit<User, 'password'>> {
+  async getCurrentUser(userId: number): Promise<any> {
     const user = await this.users.findOne({ where: { id: userId } });
     if (!user) {
       throw new Error('User not found');
@@ -86,7 +88,7 @@ export class AuthService {
     return user.toJSON();
   }
 
-  async updateUser(userId: number, data: Partial<User>): Promise<Omit<User, 'password'>> {
+  async updateUser(userId: number, data: Partial<User>): Promise<any> {
     const user = await this.users.findOne({ where: { id: userId } });
     if (!user) {
       throw new Error('User not found');

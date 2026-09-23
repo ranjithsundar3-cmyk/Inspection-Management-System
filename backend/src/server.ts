@@ -16,10 +16,9 @@ export class Server {
 
   constructor() {
     this.app = express();
-    this.port = parseInt(process.env.PORT || '3000', 10);
+    this.port = parseInt(process.env.PORT || '3001', 10);
     this.middleware();
     this.routes();
-    this.database();
   }
 
   private middleware() {
@@ -59,7 +58,8 @@ export class Server {
     }
   }
 
-  public start() {
+  public async start() {
+    await this.database();
     this.app.listen(this.port, () => {
       console.log(`Server running on http://localhost:${this.port}`);
       console.log(`API available at http://localhost:${this.port}/api/v1`);
@@ -69,5 +69,8 @@ export class Server {
 
 if (require.main === module) {
   const server = new Server();
-  server.start();
+  server.start().catch(err => {
+    console.error('Failed to start server:', err);
+    process.exit(1);
+  });
 }

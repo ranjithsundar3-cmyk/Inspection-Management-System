@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { getRepository, Repository } from 'typeorm';
 import { Report, ReportFormat, ReportStatus } from '../entities/Report';
 import { Inspection } from '../entities/Inspection';
 import { Finding } from '../entities/Finding';
@@ -13,9 +13,15 @@ export interface CreateReportData {
 }
 
 export class ReportService {
-  private reports = getRepository(Report);
-  private inspections = getRepository(Inspection);
-  private findings = getRepository(Finding);
+  private get reports(): Repository<Report> {
+    return getRepository(Report);
+  }
+  private get inspections(): Repository<Inspection> {
+    return getRepository(Inspection);
+  }
+  private get findings(): Repository<Finding> {
+    return getRepository(Finding);
+  }
 
   async generateReport(inspectionId: number, generatedById: number, format: ReportFormat = ReportFormat.PDF): Promise<Report> {
     const inspection = await this.inspections.findOne({

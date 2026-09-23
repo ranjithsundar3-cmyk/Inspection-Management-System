@@ -51,14 +51,14 @@ export class AuditFinding {
   @Column({ type: 'text', nullable: true })
   evidence: string;
 
-  @Column({ type: 'enum', enum: AuditFindingSeverity })
-  severity: AuditFindingSeverity;
+  @Column()
+  severity: string;
 
-  @Column({ type: 'enum', enum: AuditFindingStatus, default: AuditFindingStatus.OPEN })
-  status: AuditFindingStatus;
+  @Column({ default: 'open' })
+  status: string;
 
-  @Column({ type: 'enum', enum: AuditFindingCategory })
-  category: AuditFindingCategory;
+  @Column()
+  category: string;
 
   @Column({ nullable: true })
   location: string;

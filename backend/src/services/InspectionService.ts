@@ -1,13 +1,13 @@
-import { getRepository, Repository, Between, LessThan } from 'typeorm';
-import { Inspection, InspectionStatus, InspectionType, InspectionPriority } from '../entities/Inspection';
-import { Finding, FindingStatus, FindingSeverity } from '../entities/Finding';
+import { getRepository, Repository } from 'typeorm';
+import { Inspection } from '../entities/Inspection';
+import { Finding } from '../entities/Finding';
 import { User } from '../entities/User';
 
 export interface CreateInspectionData {
   title: string;
   description?: string;
-  type?: InspectionType;
-  priority?: InspectionPriority;
+  type?: string;
+  priority?: string;
   scheduledDate: Date;
   location?: string;
   siteName?: string;
@@ -20,9 +20,9 @@ export interface CreateInspectionData {
 export interface UpdateInspectionData {
   title?: string;
   description?: string;
-  type?: InspectionType;
-  status?: InspectionStatus;
-  priority?: InspectionPriority;
+  type?: string;
+  status?: string;
+  priority?: string;
   scheduledDate?: Date;
   completedDate?: Date;
   location?: string;
@@ -33,13 +33,19 @@ export interface UpdateInspectionData {
 }
 
 export class InspectionService {
-  private inspections = getRepository(Inspection);
-  private findings = getRepository(Finding);
-  private users = getRepository(User);
+  private get inspections(): Repository<Inspection> {
+    return getRepository(Inspection);
+  }
+  private get findings(): Repository<Finding> {
+    return getRepository(Finding);
+  }
+  private get users(): Repository<User> {
+    return getRepository(User);
+  }
 
   async getAll(filters: {
-    status?: InspectionStatus;
-    type?: InspectionType;
+    status?: string;
+    type?: string;
     assignedInspectorId?: number;
     page?: number;
     limit?: number;
@@ -48,7 +54,7 @@ export class InspectionService {
     const limit = filters.limit || 20;
     const skip = (page - 1) * limit;
 
-const query = this.inspections.createQueryBuilder('inspection')
+    const query = this.inspections.createQueryBuilder('inspection')
       .leftJoinAndSelect('inspection.assignedInspector', 'inspector')
       .leftJoinAndSelect('inspection.createdBy', 'creator');
 
@@ -101,21 +107,21 @@ const query = this.inspections.createQueryBuilder('inspection')
     const findings = await this.findings.find({ where: { inspectionId: id } });
 
     inspection.totalFindings = findings.length;
-    inspection.criticalFindings = findings.filter(f => f.severity === FindingSeverity.CRITICAL).length;
-    inspection.highFindings = findings.filter(f => f.severity === FindingSeverity.HIGH).length;
-    inspection.mediumFindings = findings.filter(f => f.severity === FindingSeverity.MEDIUM).length;
-    inspection.lowFindings = findings.filter(f => f.severity === FindingSeverity.LOW).length;
-    inspection.resolvedFindings = findings.filter(f => f.status === FindingStatus.RESOLVED || f.status === FindingStatus.CLOSED).length;
+    inspection.criticalFindings = findings.filter(f => f.severity === 'critical').length;
+    inspection.highFindings = findings.filter(f => f.severity === 'high').length;
+    inspection.mediumFindings = findings.filter(f => f.severity === 'medium').length;
+    inspection.lowFindings = findings.filter(f => f.severity === 'low').length;
+    inspection.resolvedFindings = findings.filter(f => f.status === 'resolved' || f.status === 'closed').length;
 
     await this.inspections.save(inspection);
   }
 
   async getStatistics(): Promise<any> {
     const total = await this.inspections.count();
-    const scheduled = await this.inspections.count({ where: { status: InspectionStatus.SCHEDULED } });
-    const inProgress = await this.inspections.count({ where: { status: InspectionStatus.IN_PROGRESS } });
-    const completed = await this.inspections.count({ where: { status: InspectionStatus.COMPLETED } });
-    const cancelled = await this.inspections.count({ where: { status: InspectionStatus.CANCELLED } });
+    const scheduled = await this.inspections.count({ where: { status: 'scheduled' } });
+    const inProgress = await this.inspections.count({ where: { status: 'in_progress' } });
+    const completed = await this.inspections.count({ where: { status: 'completed' } });
+    const cancelled = await this.inspections.count({ where: { status: 'cancelled' } });
 
     return {
       total,

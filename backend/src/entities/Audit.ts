@@ -11,6 +11,7 @@ import {
   JoinTable,
 } from 'typeorm';
 import { User } from './User';
+import { AuditFinding } from './AuditFinding';
 
 export enum AuditType {
   INTERNAL = 'internal',
@@ -47,11 +48,11 @@ export class Audit {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ type: 'enum', enum: AuditType, default: AuditType.INTERNAL })
-  type: AuditType;
+  @Column({ default: 'internal' })
+  type: string;
 
-  @Column({ type: 'enum', enum: AuditStatus, default: AuditStatus.PLANNING })
-  status: AuditStatus;
+  @Column({ default: 'planning' })
+  status: string;
 
   @Column({ type: 'date' })
   plannedStartDate: Date;
@@ -65,8 +66,8 @@ export class Audit {
   @Column({ type: 'date', nullable: true })
   actualEndDate: Date;
 
-  @Column({ type: 'enum', enum: AuditScope, default: AuditScope.OPERATIONAL })
-  scope: AuditScope;
+  @Column({ default: 'operational' })
+  scope: string;
 
   @Column({ type: 'text', nullable: true })
   criteria: string;

@@ -7,10 +7,9 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { User } from './User';
+import { Finding } from './Finding';
 
 export enum InspectionType {
   ROUTINE = 'routine',
@@ -45,14 +44,14 @@ export class Inspection {
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ type: 'enum', enum: InspectionType, default: InspectionType.ROUTINE })
-  type: InspectionType;
+  @Column({ default: 'routine' })
+  type: string;
 
-  @Column({ type: 'enum', enum: InspectionStatus, default: InspectionStatus.SCHEDULED })
-  status: InspectionStatus;
+  @Column({ default: 'scheduled' })
+  status: string;
 
-  @Column({ type: 'enum', enum: InspectionPriority, default: InspectionPriority.MEDIUM })
-  priority: InspectionPriority;
+  @Column({ default: 'medium' })
+  priority: string;
 
   @Column({ type: 'date' })
   scheduledDate: Date;

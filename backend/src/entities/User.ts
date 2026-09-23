@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   BeforeInsert,
 } from 'typeorm';
-import { IsEmail, MinLength, IsEnum } from 'class-validator';
+import { IsEmail, MinLength } from 'class-validator';
 import * as bcrypt from 'bcryptjs';
 
 export enum UserRole {
@@ -50,12 +50,11 @@ export class User {
   @Column({ default: '' })
   position: string;
 
-  @Column({ type: 'enum', enum: UserRole, default: UserRole.INSPECTOR })
-  @IsEnum(UserRole)
-  role: UserRole;
+  @Column({ default: 'inspector' })
+  role: string;
 
-  @Column({ type: 'enum', enum: UserStatus, default: UserStatus.ACTIVE })
-  status: UserStatus;
+  @Column({ default: 'active' })
+  status: string;
 
   @Column({ default: false })
   emailVerified: boolean;

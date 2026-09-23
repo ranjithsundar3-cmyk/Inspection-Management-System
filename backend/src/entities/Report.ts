@@ -36,11 +36,11 @@ export class Report {
   @Column({ type: 'text', nullable: true })
   summary: string;
 
-  @Column({ type: 'enum', enum: ReportFormat, default: ReportFormat.PDF })
-  format: ReportFormat;
+  @Column({ default: 'pdf' })
+  format: string;
 
-  @Column({ type: 'enum', enum: ReportStatus, default: ReportStatus.DRAFT })
-  status: ReportStatus;
+  @Column({ default: 'draft' })
+  status: string;
 
   @Column({ type: 'date' })
   generatedDate: Date;
