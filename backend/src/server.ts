@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
 import * as dotenv from 'dotenv';
-import { AppDataSource } from '../database/data-source';
+import { AppDataSource } from './database/data-source';
 import router from './routes';
 import path from 'path';
 
