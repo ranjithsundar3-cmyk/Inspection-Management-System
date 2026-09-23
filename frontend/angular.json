@@ -65,14 +65,14 @@
           },
           "defaultConfiguration": "development"
         },
-        "serve": {
+          "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "build": "build:production"
+              "buildTarget": "inspection-audit:build:production"
             },
             "development": {
-              "build": "build:development"
+              "buildTarget": "inspection-audit:build:development"
             }
           },
           "defaultConfiguration": "development",
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "build": "build:production"
+            "buildTarget": "inspection-audit:build:production"
           }
         },
         "test": {
