@@ -1,4 +1,5 @@
-import { getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
+import { AppDataSource } from '../database/data-source';
 import { Inspection } from '../entities/Inspection';
 import { Finding } from '../entities/Finding';
 import { User } from '../entities/User';
@@ -34,13 +35,13 @@ export interface UpdateInspectionData {
 
 export class InspectionService {
   private get inspections(): Repository<Inspection> {
-    return getRepository(Inspection);
+    return AppDataSource.getRepository(Inspection);
   }
   private get findings(): Repository<Finding> {
-    return getRepository(Finding);
+    return AppDataSource.getRepository(Finding);
   }
   private get users(): Repository<User> {
-    return getRepository(User);
+    return AppDataSource.getRepository(User);
   }
 
   async getAll(filters: {

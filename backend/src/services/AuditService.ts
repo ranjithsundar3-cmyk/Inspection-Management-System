@@ -1,4 +1,5 @@
-import { getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
+import { AppDataSource } from '../database/data-source';
 import { Audit, AuditStatus, AuditType, AuditScope } from '../entities/Audit';
 import { AuditFinding, AuditFindingStatus, AuditFindingSeverity } from '../entities/AuditFinding';
 import { User } from '../entities/User';
@@ -38,13 +39,13 @@ export interface UpdateAuditData {
 
 export class AuditService {
   private get audits(): Repository<Audit> {
-    return getRepository(Audit);
+    return AppDataSource.getRepository(Audit);
   }
   private get auditFindings(): Repository<AuditFinding> {
-    return getRepository(AuditFinding);
+    return AppDataSource.getRepository(AuditFinding);
   }
   private get users(): Repository<User> {
-    return getRepository(User);
+    return AppDataSource.getRepository(User);
   }
 
   async getAll(filters: {

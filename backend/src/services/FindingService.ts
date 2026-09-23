@@ -1,4 +1,5 @@
-import { getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
+import { AppDataSource } from '../database/data-source';
 import { Finding, FindingStatus, FindingSeverity, FindingCategory } from '../entities/Finding';
 import { InspectionService } from './InspectionService';
 
@@ -37,7 +38,7 @@ export interface UpdateFindingData {
 
 export class FindingService {
   private get findings(): Repository<Finding> {
-    return getRepository(Finding);
+    return AppDataSource.getRepository(Finding);
   }
   private inspectionService = new InspectionService();
 

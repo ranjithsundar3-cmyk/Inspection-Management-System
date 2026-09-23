@@ -1,4 +1,5 @@
-import { getRepository } from 'typeorm';
+import { Repository } from 'typeorm';
+import { AppDataSource } from '../database/data-source';
 import { AuditFinding, AuditFindingStatus, AuditFindingSeverity, AuditFindingCategory } from '../entities/AuditFinding';
 import { AuditService } from './AuditService';
 
@@ -37,7 +38,9 @@ export interface UpdateAuditFindingData {
 }
 
 export class AuditFindingService {
-  private findings = getRepository(AuditFinding);
+  private get findings(): Repository<AuditFinding> {
+    return AppDataSource.getRepository(AuditFinding);
+  }
   private auditService = new AuditService();
 
   async getAll(filters: {

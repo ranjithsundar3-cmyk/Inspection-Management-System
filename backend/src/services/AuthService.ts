@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-import { getRepository, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
+import { AppDataSource } from '../database/data-source';
 import { User } from '../entities/User';
 
 export interface JWTPayload {
@@ -16,7 +17,7 @@ export interface AuthResponse {
 
 export class AuthService {
   private get users(): Repository<User> {
-    return getRepository(User);
+    return AppDataSource.getRepository(User);
   }
 
   async register(data: {
